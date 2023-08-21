@@ -21,10 +21,7 @@ const provider = new GoogleAuthProvider();
 
 export const login = async () => {
   try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-
-    return user;
+    await signInWithPopup(auth, provider);
   } catch (error) {
     console.error(error);
   }
@@ -33,8 +30,6 @@ export const login = async () => {
 export const logout = async () => {
   try {
     await signOut(auth);
-
-    return null;
   } catch (error) {
     console.error(error);
   }

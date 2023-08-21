@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FiShoppingBag } from "react-icons/fi";
 import { BsFillPencilFill } from "react-icons/bs";
 import { login, logout, onAuthChange } from "../api/firebase";
+import User from "./User";
 
 const Navbar = () => {
   const [user, setUser] = useState();
@@ -12,16 +13,6 @@ const Navbar = () => {
       setUser(user);
     });
   }, []);
-
-  const handleLogin = async () => {
-    const user = await login();
-    setUser(user);
-  };
-
-  const handleLogout = async () => {
-    const result = await logout();
-    setUser(result);
-  };
 
   return (
     <header className="flex justify-between p-2 border-b border-gray-300">
@@ -35,8 +26,9 @@ const Navbar = () => {
         <Link to="/products/new" className="text-2xl">
           <BsFillPencilFill />
         </Link>
-        {!user && <button onClick={handleLogin}>Login</button>}
-        {user && <button onClick={handleLogout}>Logout</button>}
+        {user && <User user={user} />}
+        {!user && <button onClick={login}>Login</button>}
+        {user && <button onClick={logout}>Logout</button>}
       </nav>
     </header>
   );
