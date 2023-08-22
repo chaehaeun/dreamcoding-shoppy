@@ -1,17 +1,30 @@
 import React, { useState } from "react";
 import Button from "../components/ui/Button";
 import { uploadImage } from "../api/uploader";
+import { addNewProduct } from "../api/firebase";
 
 const NewProduct = () => {
   const [product, setProduct] = useState({});
   const [file, setFile] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     // 제품 사진을 Cloudinary에 업로드 후 URL을 받아옴
     // Firebase에 새로운 제품을 추가
-    const url = await uploadImage(file);
-    console.log(url);
+    try {
+      setIsLoading(true);
+      const url = await uploadImage(file);
+      console.log(url);
+      addNewProduct(product, url);
+      setSuccess("제품을 성공적으로 등록했습니다.");
+    } catch {
+      setSuccess("제품 등록에 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+      setTimeout(() => setSuccess(null), 3000);
+    }
   };
   const handleChange = (event) => {
     const { name, value, files } = event.target;
@@ -22,9 +35,17 @@ const NewProduct = () => {
     setProduct((product) => ({ ...product, [name]: value }));
   };
   return (
-    <section>
-      {file && <img src={URL.createObjectURL(file)} alt="local file" />}
-      <form onSubmit={handleSubmit}>
+    <section className="w-full text-center">
+      <h2 className="my-4 text-2xl font-bold">새로운 제품 등록</h2>
+      {success && <p className="my-2">✅ {success}</p>}
+      {file && (
+        <img
+          className="mx-auto mb-2 w-96"
+          src={URL.createObjectURL(file)}
+          alt="local file"
+        />
+      )}
+      <form className="flex flex-col px-12" onSubmit={handleSubmit}>
         <input
           type="file"
           accept="image/*"
@@ -72,7 +93,9 @@ const NewProduct = () => {
           required
           onChange={handleChange}
         />
-        <Button>제품 등록하기</Button>
+        <Button disabled={isLoading}>
+          {isLoading ? "업로드 중..." : "제품 등록하기"}
+        </Button>
       </form>
     </section>
   );
