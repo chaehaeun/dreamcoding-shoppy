@@ -65,3 +65,11 @@ export const addNewProduct = async (product, image) => {
     options: product.options.split(","),
   });
 };
+
+export const getProducts = async () => {
+  const snapshot = await get(ref(db, "products"));
+  if (snapshot.exists()) {
+    return Object.values(snapshot.val()); // 키 말고 밸류만 가져오려고
+  }
+  return [];
+};
