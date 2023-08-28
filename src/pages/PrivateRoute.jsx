@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../components/context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 const PrivateRoute = ({ children, requireAdmin }) => {
   // 로그인한 사용자가 있는지 확인

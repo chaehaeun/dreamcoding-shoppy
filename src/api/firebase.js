@@ -6,7 +6,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getDatabase, ref, get, set } from "firebase/database";
+import { getDatabase, ref, get, set, remove } from "firebase/database";
 import { v4 as uuid } from "uuid";
 
 const firebaseConfig = {
@@ -72,4 +72,18 @@ export const getProducts = async () => {
     return Object.values(snapshot.val()); // 키 말고 밸류만 가져오려고
   }
   return [];
+};
+
+export const getCart = async (userId) => {
+  const snapshot = await get(ref(db, `carts/${userId}`));
+  const items = snapshot.val() || {};
+  return Object.values(items);
+};
+
+export const addOrUpdateToCart = async (userId, product) => {
+  return set(ref(db, `carts/${userId}/${product.id}`), product);
+};
+
+export const removeFromCart = async (userId, productId) => {
+  return remove(ref(db, `carts/${userId}/${productId}`));
 };
