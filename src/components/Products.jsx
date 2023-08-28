@@ -8,7 +8,7 @@ const Products = () => {
     isLoading,
     data: products,
     error,
-  } = useQuery(["products"], getProducts);
+  } = useQuery(["products"], getProducts, { staleTime: 1000 * 60 });
   return (
     <>
       {isLoading && <p>Loading...</p>}

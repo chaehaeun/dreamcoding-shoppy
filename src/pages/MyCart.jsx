@@ -6,7 +6,7 @@ import CartItem from "../components/CartItem";
 import PriceCard from "../components/PriceCard";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { FaEquals } from "react-icons/fa";
-import Button from "../components/Button";
+import Button from "../components/ui/Button";
 
 const SHIPPING = 3000;
 
