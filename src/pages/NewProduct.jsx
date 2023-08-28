@@ -1,22 +1,14 @@
 import React, { useState } from "react";
 import Button from "../components/ui/Button";
 import { uploadImage } from "../api/uploader";
-import { addNewProduct } from "../api/firebase";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import useProducts from "../hooks/useProducts";
 
 const NewProduct = () => {
   const [product, setProduct] = useState({});
   const [file, setFile] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState();
-
-  const queryClient = useQueryClient();
-  const addProduct = useMutation(
-    ({ product, url }) => addNewProduct(product, url),
-    {
-      onSuccess: () => queryClient.invalidateQueries(["products"]), // 새로운 제품이 추가되면 products 쿼리를 다시 불러옴
-    }
-  );
+  const { addProduct } = useProducts();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
